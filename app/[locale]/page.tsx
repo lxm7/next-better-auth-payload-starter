@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ModeSwitcher } from "@/components/mode-switcher";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { getLandingPage } from "@/lib/cms";
+import { content } from "@/lib/content";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -21,7 +21,17 @@ export default async function Home({ params }: Props) {
 
   setRequestLocale(locale);
 
-  const landingPage = await getLandingPage(locale);
+  const [landingPage, t] = await Promise.all([
+    content.getLandingPage(locale),
+    getTranslations("Home"),
+  ]);
+
+  // Field by field: a null entry (CMS down, or not published) and a null
+  // field (editor left it empty) both land on the same message.
+  const heading = landingPage?.heading ?? t("heading");
+  const subheading = landingPage?.subheading ?? t("subheading");
+  const ctaPrimary = landingPage?.ctaPrimaryLabel ?? t("ctaPrimary");
+  const ctaSecondary = landingPage?.ctaSecondaryLabel ?? t("ctaSecondary");
 
   return (
     <>
@@ -37,19 +47,16 @@ export default async function Home({ params }: Props) {
           width={100}
         />
 
-        <h1 className="font-bold text-4xl">{landingPage.heading}</h1>
+        <h1 className="font-bold text-4xl">{heading}</h1>
 
-        <p className="text-lg">
-          This is a starter project for Better Auth. It is a simple project that
-          uses Better Auth to authenticate users.
-        </p>
+        <p className="text-lg">{subheading}</p>
 
         <div className="flex gap-2">
           <Link href="/login">
-            <Button>Login</Button>
+            <Button>{ctaPrimary}</Button>
           </Link>
           <Link href="/signup">
-            <Button>Signup</Button>
+            <Button>{ctaSecondary}</Button>
           </Link>
         </div>
       </div>

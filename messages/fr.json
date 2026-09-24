@@ -59,5 +59,11 @@
     "success": "Mot de passe réinitialisé avec succès",
     "noAccount": "Vous n'avez pas de compte ?",
     "signUpLink": "S'inscrire"
+  },
+  "Home": {
+    "heading": "Démarrage Better Auth",
+    "subheading": "Projet de départ pour Better Auth. Un projet simple qui utilise Better Auth pour authentifier les utilisateurs.",
+    "ctaPrimary": "Connexion",
+    "ctaSecondary": "Inscription"
   }
 }

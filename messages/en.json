@@ -59,5 +59,11 @@
     "success": "Password reset successfully",
     "noAccount": "Don't have an account?",
     "signUpLink": "Sign up"
+  },
+  "Home": {
+    "heading": "Better Auth Starter",
+    "subheading": "This is a starter project for Better Auth. It is a simple project that uses Better Auth to authenticate users.",
+    "ctaPrimary": "Login",
+    "ctaSecondary": "Signup"
   }
 }
