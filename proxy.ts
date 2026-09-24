@@ -45,7 +45,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except API routes, Next internals, Vercel internals, and any
-  // pathname containing a dot (static assets such as `/favicon.ico`).
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  // Everything except API routes, Next internals, Vercel internals, Payload's
+  // admin and API, and any pathname containing a dot (static assets such as
+  // `/favicon.ico`). Payload's two are anchored to a whole segment so a
+  // future `/administrator` page still gets a locale.
+  matcher:
+    "/((?!api|_next|_vercel|admin(?:/|$)|cms-api(?:/|$)|.*\\..*).*)",
 };
