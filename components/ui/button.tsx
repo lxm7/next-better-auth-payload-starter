@@ -1,5 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
 import type * as React from "react";
 
 import { cn } from "cn";
@@ -35,24 +36,61 @@ const buttonVariants = cva(
   }
 );
 
+// `loading` injects extra children (spinner + sweep), which Radix `Slot`
+// can't accept — it needs exactly one child — so the two are exclusive.
+type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> &
+  (
+    | { asChild?: false; loading?: boolean }
+    | { asChild: true; loading?: never }
+  );
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  loading = false,
+  disabled,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
+}: ButtonProps) {
+  if (asChild) {
+    return (
+      <Slot
+        className={cn(buttonVariants({ variant, size, className }))}
+        data-slot="button"
+        {...props}
+      >
+        {children}
+      </Slot>
+    );
+  }
 
   return (
-    <Comp
-      className={cn(buttonVariants({ variant, size, className }))}
+    <button
+      aria-busy={loading || undefined}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        // Busy buttons are disabled for input, but stay at full opacity so
+        // the sweep reads as "working" rather than "unavailable".
+        loading && "relative overflow-hidden disabled:opacity-100"
+      )}
       data-slot="button"
+      disabled={loading || disabled}
       {...props}
-    />
+    >
+      {loading && (
+        <>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-current/15 to-transparent motion-reduce:hidden"
+          />
+          <Loader2 aria-hidden className="animate-spin" />
+        </>
+      )}
+      {children}
+    </button>
   );
 }
 
