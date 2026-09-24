@@ -1,6 +1,17 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import { Editors } from "./cms/collections/editors";
+import { TodoCategories } from "./cms/collections/todo-categories";
+import { LandingPage } from "./cms/globals/landing-page";
+import { type Locale, routing } from "./i18n/routing";
+
+// Keyed by the app's `Locale`, so adding a locale to `i18n/routing.ts` fails
+// the typecheck here until the CMS gets a label for it too.
+const LOCALE_LABELS: Record<Locale, string> = {
+  en: "English",
+  fr: "Français",
+};
 
 // Fails the boot (and the build, which imports this config) rather than
 // starting Payload with an empty secret or no database.
@@ -36,7 +47,20 @@ export default buildConfig({
   admin: {
     user: Editors.slug,
   },
-  collections: [Editors],
+  editor: lexicalEditor(),
+  // The app's locales are the source of truth; the CMS mirrors them.
+  localization: {
+    locales: routing.locales.map((code) => ({
+      code,
+      label: LOCALE_LABELS[code],
+    })),
+    defaultLocale: routing.defaultLocale,
+    // Off: a missing French field comes back null, and the page falls back to
+    // its French next-intl message rather than to English CMS copy.
+    fallback: false,
+  },
+  collections: [Editors, TodoCategories],
+  globals: [LandingPage],
   typescript: {
     outputFile: "cms/payload-types.ts",
   },

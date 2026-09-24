@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     editors: Editor;
+    'todo-categories': TodoCategory;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,6 +77,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     editors: EditorsSelect<false> | EditorsSelect<true>;
+    'todo-categories': TodoCategoriesSelect<false> | TodoCategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -84,10 +86,14 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'fr') | ('en' | 'fr')[];
+  globals: {
+    'landing-page': LandingPage;
+  };
+  globalsSelect: {
+    'landing-page': LandingPageSelect<false> | LandingPageSelect<true>;
+  };
+  locale: 'en' | 'fr';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -143,6 +149,28 @@ export interface Editor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "todo-categories".
+ */
+export interface TodoCategory {
+  id: number;
+  /**
+   * Stable identifier stored on todos, e.g. `work`. Lowercase letters, digits and hyphens. Cannot be changed after creation.
+   */
+  key: string;
+  name: string;
+  /**
+   * Hex colour, e.g. #2563eb. Optional.
+   */
+  color?: string | null;
+  /**
+   * Hides the category from new todos. Existing todos keep it.
+   */
+  archived?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -164,10 +192,15 @@ export interface PayloadKv {
  */
 export interface PayloadLockedDocument {
   id: number;
-  document?: {
-    relationTo: 'editors';
-    value: number | Editor;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'editors';
+        value: number | Editor;
+      } | null)
+    | ({
+        relationTo: 'todo-categories';
+        value: number | TodoCategory;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'editors';
@@ -235,6 +268,18 @@ export interface EditorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "todo-categories_select".
+ */
+export interface TodoCategoriesSelect<T extends boolean = true> {
+  key?: T;
+  name?: T;
+  color?: T;
+  archived?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -272,6 +317,50 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "landing-page".
+ */
+export interface LandingPage {
+  id: number;
+  heading: string;
+  subheading?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  ctaPrimaryLabel?: string | null;
+  ctaSecondaryLabel?: string | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "landing-page_select".
+ */
+export interface LandingPageSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  body?: T;
+  ctaPrimaryLabel?: T;
+  ctaSecondaryLabel?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
