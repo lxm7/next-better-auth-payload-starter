@@ -49,6 +49,5 @@ export const config = {
   // admin and API, and any pathname containing a dot (static assets such as
   // `/favicon.ico`). Payload's two are anchored to a whole segment so a
   // future `/administrator` page still gets a locale.
-  matcher:
-    "/((?!api|_next|_vercel|admin(?:/|$)|cms-api(?:/|$)|.*\\..*).*)",
+  matcher: "/((?!api|_next|_vercel|admin(?:/|$)|cms-api(?:/|$)|.*\\..*).*)",
 };
