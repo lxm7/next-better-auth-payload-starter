@@ -4,6 +4,22 @@
     "logoAlt": "Better Auth Starter Logo",
     "loading": "Loading..."
   },
+  "Calendar": {
+    "title": "Calendar",
+    "description": "Drag todos to reschedule them, or click a day to add one.",
+    "today": "Today",
+    "previous": "Back",
+    "next": "Next",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "allDay": "All day",
+    "noEventsInRange": "No todos in this range.",
+    "showMore": "+{count} more",
+    "createTitle": "New todo",
+    "createTitleOn": "New todo on {date}",
+    "createDescription": "Add a todo due on this day."
+  },
   "Legal": {
     "agreement": "By clicking continue, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   },

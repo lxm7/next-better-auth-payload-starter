@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getOrganizations } from "@/server/organizations";
 import { Logout } from "./logout";
 import { ModeSwitcher } from "./mode-switcher";
-import { OrganizationSwitcher } from "./organization-switcher";
+// import { OrganizationSwitcher } from "./organization-switcher";
 
 interface HeaderProps {
   showOrganizations?: boolean;
@@ -15,11 +15,11 @@ export async function Header({ showOrganizations = true }: HeaderProps) {
   return (
     <header className="absolute top-0 right-0 flex w-full items-center justify-between p-4">
       <div className="flex items-center gap-2">
-        {showOrganizations ? (
+        {/* {showOrganizations ? (
           <OrganizationSwitcher organizations={organizations} />
         ) : (
           <div />
-        )}
+        )} */}
 
         {/* `Link` from `@/i18n/navigation`, not `next/link`: the bare one
             drops the locale prefix and sends a French visitor to `/todos`,

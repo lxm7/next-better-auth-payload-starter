@@ -1,11 +1,9 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ModeSwitcher } from "@/components/mode-switcher";
 import { Button } from "@/components/ui/button";
+import { assertLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 import { content } from "@/lib/content";
 
 interface Props {
@@ -13,12 +11,7 @@ interface Props {
 }
 
 export default async function Home({ params }: Props) {
-  const { locale } = await params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
+  const locale = await assertLocale(params);
   setRequestLocale(locale);
 
   const [landingPage, t] = await Promise.all([

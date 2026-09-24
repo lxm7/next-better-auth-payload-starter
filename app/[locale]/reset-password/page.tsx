@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { ResetPasswordForm } from "@/components/forms/reset-password-form";
+import { assertLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export default async function ResetPasswordPage({ params }: Props) {
-  const { locale } = await params;
+  const locale = await assertLocale(params);
   setRequestLocale(locale);
 
   const t = await getTranslations("AuthLayout");

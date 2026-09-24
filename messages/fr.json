@@ -4,6 +4,22 @@
     "logoAlt": "Logo Better Auth Starter",
     "loading": "Chargement…"
   },
+  "Calendar": {
+    "title": "Calendrier",
+    "description": "Faites glisser vos tâches pour les replanifier, ou cliquez sur un jour pour en ajouter une.",
+    "today": "Aujourd'hui",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "month": "Mois",
+    "week": "Semaine",
+    "day": "Jour",
+    "allDay": "Toute la journée",
+    "noEventsInRange": "Aucune tâche sur cette période.",
+    "showMore": "+{count} de plus",
+    "createTitle": "Nouvelle tâche",
+    "createTitleOn": "Nouvelle tâche le {date}",
+    "createDescription": "Ajoutez une tâche prévue ce jour-là."
+  },
   "Legal": {
     "agreement": "En cliquant sur continuer, vous acceptez nos <terms>Conditions d'utilisation</terms> et notre <privacy>Politique de confidentialité</privacy>."
   },
