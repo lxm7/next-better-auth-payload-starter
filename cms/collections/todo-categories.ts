@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { isEditor, nobody } from "../access";
+import { revalidateCollectionOnChange } from "../hooks/revalidate-cms";
 
 const KEY_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}$/i;
@@ -20,6 +21,11 @@ export const TodoCategories: CollectionConfig = {
     create: isEditor,
     update: isEditor,
     delete: nobody,
+  },
+  // No drafts here, so every save is live. No `afterDelete`: deletion is
+  // blocked above.
+  hooks: {
+    afterChange: [revalidateCollectionOnChange],
   },
   fields: [
     {

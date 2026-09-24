@@ -1,9 +1,10 @@
 import type { Locale } from "@/i18n/routing";
 
-// The app's shape of CMS content, deliberately not Hygraph's. No `__typename`,
-// no `stage`, no `localizations`, and `color` already flattened from Hygraph's
-// object-typed Color field to a plain hex string. A Strapi adapter later
-// implements the same interface without a single consumer changing.
+// The app's shape of CMS content, not any CMS's wire format. Simple fields stay
+// plain types, so swapping the CMS behind `index.ts` never touches a consumer.
+// Rich content, when a page first renders it, may use Payload's own Lexical
+// type rather than a home-grown one: re-implementing its converters to stay
+// neutral would cost more than another CMS move is likely to.
 
 export interface LandingPageContent {
   heading: string;
@@ -21,6 +22,9 @@ export interface TodoCategory {
   name: string;
   // Hex, e.g. "#2563eb". Null when the editor left the colour unset.
   color: string | null;
+  // Categories are archived, never deleted, because todos reference them by
+  // key. Pickers hide archived ones; resolving an existing todo's key must not.
+  archived: boolean;
 }
 
 export interface ContentSource {

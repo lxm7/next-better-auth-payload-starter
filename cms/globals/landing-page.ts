@@ -1,5 +1,6 @@
 import type { GlobalConfig } from "payload";
 import { isEditor } from "../access";
+import { revalidateGlobalOnPublish } from "../hooks/revalidate-cms";
 
 // A global, not a collection: there is exactly one landing page, which matches
 // `ContentSource.getLandingPage(locale)` taking no slug. More marketing pages
@@ -13,11 +14,14 @@ export const LandingPage: GlobalConfig = {
     read: isEditor,
     update: isEditor,
   },
-  // Draft/publish, like Hygraph's stages: editors stage copy without it going
-  // live, and the adapter only ever asks for the published version.
+  // Draft/publish: editors stage copy without it going live, and the adapter
+  // only ever asks for the published version.
   versions: {
     drafts: true,
     max: 20,
+  },
+  hooks: {
+    afterChange: [revalidateGlobalOnPublish],
   },
   fields: [
     {

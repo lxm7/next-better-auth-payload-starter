@@ -1,17 +1,19 @@
 import { getPayload } from "payload";
 import { type Locale, routing } from "../i18n/routing";
 import config from "../payload.config";
+import { DISABLE_REVALIDATE } from "./hooks/revalidate-cms";
 
-// Seeds the CMS with the content that lived in Hygraph at cutover, so a fresh
-// database (a new Neon branch, a new environment) gets the same starting copy.
-// The values are data, not a Hygraph fetch, so this keeps working after
-// Hygraph is removed.
+// Seeds the CMS with the site's starting copy, so a fresh database (a new Neon
+// branch, a new environment) begins with the same content. The values live
+// here as data, so seeding has no dependency on any other system.
 //
 //   pnpm payload run cms/seed.ts            # only fills an empty landing page
 //   pnpm payload run cms/seed.ts --force    # overwrites editorial changes
 //
 // Writes through the Local API, so validation, versions and hooks all run, and
-// publishes each locale (the app only reads published content).
+// publishes each locale (the app only reads published content). The one hook
+// skipped is cache revalidation: there's no Next cache in a CLI process, and a
+// deployed site picks the content up within its `revalidate` window.
 
 interface LandingPageSeed {
   heading: string;
@@ -59,6 +61,7 @@ try {
         slug: "landing-page",
         locale,
         data: { ...LANDING_PAGE[locale], _status: "published" },
+        context: { [DISABLE_REVALIDATE]: true },
       });
       payload.logger.info(`Published landing page (${locale}).`);
     }
